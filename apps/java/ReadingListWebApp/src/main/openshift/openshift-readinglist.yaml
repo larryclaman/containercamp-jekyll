@@ -1,0 +1,51 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: web
+    spec:
+      containers:
+      - name: web
+        image: ravitella/docker-springboot-readinglistapplication:latest
+        ports:
+         - containerPort: 7070
+        env:
+         - name: SPRING_DATASOURCE_URL
+           value: jdbc:mysql://mysql:3306/readinglist?useSSL=false
+         - name: SPRING_DATASOURCE_USERNAME
+           value: user
+         - name: SPRING_DATASOURCE_PASSWORD
+           value: password
+      - name: api
+        image: ravitella/docker-springboot-recommendationservice:latest
+        ports:
+         - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: web
+  name: web
+spec:
+  ports:
+    # The port that this service should serve on.
+    - port: 80
+      targetPort: 7070
+  # Label keys and values that must match in order to receive traffic for this service.
+  selector:
+     run: web
+---
+apiVersion: v1
+kind: Route
+metadata:
+  name: readinglisthou
+spec:
+  to:
+    kind: Service
+    name: web

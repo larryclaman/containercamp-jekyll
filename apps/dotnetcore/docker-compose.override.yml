@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  azurereadinglist:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+
+  azurereadingapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"

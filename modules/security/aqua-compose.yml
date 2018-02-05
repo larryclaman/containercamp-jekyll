@@ -1,0 +1,98 @@
+version: '2'
+services:
+  aqua-web:
+    image: aquasec/server:2.5.3
+    links:
+      - aqua-db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      ### Modify the below lines to add custom certificate (https) to Aqua Server
+      # - <path to key file on the host>:/opt/scalock/key.pem
+      # - <path to cert file on the host>:/opt/scalock/cert.pem
+    #network_mode: "host"
+    user: root
+    ports:
+      - "80:8080"
+      # Remove below remark line to enable HTTPS
+      # - "443:8443"
+    environment:
+      - SCALOCK_DBUSER=postgres
+      #- AWS_DEFAULT_REGION=<aws_region>
+      #- AWS_SDK_LOAD_CONFIG=true
+      - SCALOCK_DBPASSWORD=HS75EMcYWf
+      - SCALOCK_DBNAME=scalock
+      - SCALOCK_DBHOST=aqua-db
+      - SCALOCK_DBPORT=5432
+      # - SCALOCK_DBSSL=require
+      - SCALOCK_AUDIT_DBUSER=postgres
+      - SCALOCK_AUDIT_DBPASSWORD=HS75EMcYWf
+      - SCALOCK_AUDIT_DBNAME=slk_audit
+      - SCALOCK_AUDIT_DBHOST=aqua-db
+      - SCALOCK_AUDIT_DBPORT=5432
+      - LICENSE_TOKEN=3Q-w3KPOQMk7mXl-D_npFmO2MUXgZC7HT3MQieVf-5pQzm_Z01O87y-UMKHZb7Tk54b6po61eKRrbQCDBtEoSEanJW9PkOQIwM39eZ81qX7HPfSj91Fcqtx_z5SWtTswsR88J-7C_0eyLsKYo0LsnDVdXolrvkHupWrduF9ipRnybG8Y4QF9h92N_87WHRzI3Q9nWr-fgR1z4Xj-2qTZMM3abeeCGFxp1gtC4jmpJ0VDajz_b2mmvnt2uZG1HvYDv1vzBWU8XwUqIoD7gUH0Nr-3P6-DxbE0QlD1aysvAmsPYCjDMmAV3V8UNJn_M-fYF2uuXLjcgQiSiUuIvmOvxw5NOtsuSaAwngxImONuPGhTcFrHr-jUvm8e-MEuBB8mGcyRpJAAeShAUpqqgNS3W6st6PcEnKtlFAPUoYGkKIsl
+      #- AUTHORIZATION_HEADER=HEADER
+      # - SCALOCK_AUDIT_DBSSL=require
+      ### Modify below line to change the cyber center server address to a local instance
+      # - CYBERCENTER_ADDR=https://cybercenter4.aquadev.com
+      ### Modify below line to automatically set administrator password
+      - ADMIN_PASSWORD=workshop
+      ### Modify below lines to create a batch install profile for Aqua Agent
+      - BATCH_INSTALL_TOKEN=workshop
+      - BATCH_INSTALL_NAME=workshop
+      - BATCH_INSTALL_GATEWAY=127.0.0.1
+      - BATCH_INSTALL_ENFORCE_MODE=y
+      ### Modify below lines if you need HTTP/HTTPS Proxy for connecting to the internet
+      # - http_proxy=<http proxy url>
+      # - https_proxy=<https proxy url>
+      # - no_proxy=<address or name of internal registry>
+    container_name: aqua-web
+    hostname: aqua-web
+    restart: always
+  aqua-gateway:
+    image: aquasec/gateway:2.5.3
+    ### Gateway can connect to a local database or remote
+    ### By default it will connect to database on '127.0.0.1'
+    ### Remove the below comment to change the 127.0.0.1 to a linked database container
+    # links:
+    #  - aqua-db
+    ports:
+      - "3622:3622"
+    network_mode: "host"
+    ### Remove below comment to limit log file size. This is only relevant when using JSON-file log driver
+    ### log_opt:
+    ###  max-file: "10"
+    ###  max-size: "10m"
+    environment:
+      - SCALOCK_DBUSER=postgres
+      - SCALOCK_DBPASSWORD=HS75EMcYWf
+      - SCALOCK_DBNAME=scalock
+      # - SCALOCK_DBHOST=aqua-db
+      - SCALOCK_DBHOST=127.0.0.1
+      - SCALOCK_DBPORT=5432
+      # - SCALOCK_DBSSL=require
+      - SCALOCK_AUDIT_DBUSER=postgres
+      - SCALOCK_AUDIT_DBPASSWORD=HS75EMcYWf
+      - SCALOCK_AUDIT_DBNAME=slk_audit
+      # - SCALOCK_AUDIT_DBHOST=aqua-db
+      - SCALOCK_AUDIT_DBHOST=127.0.0.1
+      - SCALOCK_AUDIT_DBPORT=5432
+      # - SCALOCK_AUDIT_DBSSL=require
+      ### Modify the below line to specify Aqua Gateway public IP address
+      # - SCALOCK_GATEWAY_PUBLIC_IP=<specify IP address>:3622
+      ### Modify the below line to specify gateway logical name in Aqua Management Console
+      ### By default hostname will be used as logical name
+      # - SCALOCK_GATEWAY_NAME=<logical name>
+      ### Modify the below line to enable Health Check service on Aqua Gateway that can be used by load-balancer to check service availability
+      # - HEALTH_MONITOR=0.0.0.0:80
+    container_name: aqua-gateway
+    restart: always
+  aqua-db:
+    image: aquasec/database:2.5.3
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=HS75EMcYWf
+    container_name: aqua-db
+    hostname: aqua-database
+    restart: always
+

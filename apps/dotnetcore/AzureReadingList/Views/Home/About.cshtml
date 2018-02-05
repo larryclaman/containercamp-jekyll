@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Default Document Creation";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-hover">
+            <tr>
+                <td class="col-md-2 text-center">
+                    <div class="btn-group btn-group-justified">
+                        <a asp-action="Deploy" class="btn-primary">
+                            <span class="glyphicon glyphicon-import"></span>Deploy Default Documents!
+                        </a>
+                        <a asp-action="Cancel" class="btn-danger">
+                            <span class="glyphicon glyphicon-backward"></span>Cancel
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

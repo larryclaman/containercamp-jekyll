@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  azurereadinglist:
+    image: azurereadinglist
+    build:
+      context: ./AzureReadingList
+      dockerfile: Dockerfile
+    ports:
+    - "32769:80"
+    environment: 
+    - EndPoint=<EndPoint Url of API container - if local this is the ip of the Docker NIC and port 32768>
+  azurereadingapi:
+    image: azurereadingapi
+    build:
+      context: ./AzureReadingApi
+      dockerfile: Dockerfile
+    ports:
+    - "32768:80"
+    environment: 
+    - EndPointDocDb=<Replace with DocDb Endpoint>
+    - ReadWriteAuthKey=<Replace with Read Write Key>
+    - ReadOnlyAuthKey=<Replace with read key>
+    - DatabaseId=ReadingList
+    - CollectionId=Recommendations
+    - readerName=testuser

@@ -1,0 +1,43 @@
+﻿@model AzureReadingCore.Models.Book
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Edit</h2>
+<div class="container-fluid">
+    <form asp-action="Edit" asp-anti-forgery="true" id="bookUpdate" method="post">
+        <div class="row">
+            <div class="container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-1 text-center">Title</th>
+                            <th class="col-xs-1 text-center">Author</th>
+                            <th class="col-xs-1 text-center">ISBN</th>
+                            <th class="col-xs-1 text-center">Description</th>
+                            <th class="col-xs-1 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">@Html.EditorFor(book => book.title)</td>
+                            <td class="text-center">@Html.EditorFor(book => book.author)</td>
+                            <td class="text-center">@Html.EditorFor(book => book.isbn)</td>
+                            <td class="text-center">@Html.EditorFor(book => book.description)</td>
+                            <td class="text-center">
+                                <input type="hidden" id="bookId" name="bookId" value="@Model.id"/>
+                                <div class="btn-group">
+                                    <button type="submit" asp-action="Edit" asp-route-collection="bookUpdate" asp-route-id="@Model.id" class="btn btn-warning active">
+                                        <span class="glyphicon glyphicon-save"></span>Save
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-success">Cancel
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+   <title>Spring Boot Reading List</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+    <!-- Custom CSS -->
+      	<link rel="stylesheet" th:href="@{/thumbnail-gallery.css}" />
+</head>
+<body>
+ <form action="#" method="post" th:action="@{/edit}">
+<!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Reading List</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                  </ul>
+
+                  <p class="navbar-text pull-right">
+  Server IP: <span th:text="${serverIP}"></span></p>
+  <p class="navbar-text pull-right">DB: MySQL</p>
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+	<div class="container-fluid">
+		<div class="row"></div>
+
+		<div class="row">
+			<div class="container">
+
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th class="col-xs-1 text-center">Title</th>
+							<th class="col-xs-1 text-center">Author</th>
+							<th class="col-xs-1 text-center">ISBN</th>
+							<th class="col-xs-1 text-center">Description</th>
+							<th class="col-xs-1 text-center">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+						 	<td class="text-center" ><input type="text" class="form-control" id="title" name="title" th:value="${book.title}"></input></td>
+							<td class="text-center" ><input type="text" class="form-control" id="author" name="author" th:value="${book.author}" ></input></td>
+							<td class="text-center" ><input type="text" class="form-control" id="isbn" name="isbn" th:value="${book.isbn}" ></input></td>
+							<td class="text-center" ><input type="text" class="form-control" id="description" name="description" th:value="${book.description}" ></input></td>
+							<td class="text-center">
+							     <input type="hidden" th:value="${book.id}" name="id" />
+							    <div class="btn-group">
+								 <button type="submit" class="btn btn-warning" name="action" value="update">
+								  <span class="glyphicon glyphicon-save"></span> Save</button>
+								 <button type="submit" class="btn btn-success" name="action" value="Cancel">Cancel</button>
+								</div>
+								 </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
+	</div>
+</form>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

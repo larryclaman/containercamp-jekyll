@@ -1,0 +1,35 @@
+version: '2'
+services:
+  mysql:
+    image: "mysql/mysql-server:latest"
+    environment:
+      MYSQL_ROOT_PASSWORD: "{aqua.mysql.password}"
+      MYSQL_DATABASE: readinglist
+      MYSQL_USER: read-user
+      MYSQL_PASSWORD: "{aqua.mysql.password}"
+      DATADIR: /data
+      AQUA_APP: READ-MYSQL
+    container_name: read-mysql
+
+  api:
+    image: "ravitella/docker-springboot-recommendationservice:latest"
+    environment:
+      AQUA_APP: READ-API
+    container_name: read-api
+
+  web:
+    depends_on:
+      - mysql
+      - api
+    image: "ravitella/docker-springboot-readinglistapplication:latest"
+    ports:
+      - "81:7070"
+    environment:
+      spring.datasource.url: jdbc:mysql://mysql:3306/readinglist?useSSL=false
+      spring.datasource.username: read-user
+      spring.datasource.password: "{aqua.mysql.password}"
+      externalAPI.recommendationAPIURL: http://api:8080/recommendations
+      AQUA_APP: READ_WEB
+    restart: on-failure
+    container_name: read-web
+
